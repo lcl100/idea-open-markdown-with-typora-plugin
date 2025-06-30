@@ -1,13 +1,13 @@
 <idea-plugin>
     <id>com.lcl100.idea-open-markdown-with-typora-plugin</id>
     <name>Open Markdown with Typora</name>
-    <version>1.2</version>
+    <version>1.3</version>
     <vendor email="lcl2961316542@163.com" url="https://github.com/lcl100/idea-open-markdown-with-typora-plugin">lcl100</vendor>
 
     <description>
         <![CDATA[
-      <em>Allows you to open markdown file with external Typora.exe.</em><br/>
-      <em>允许你用外部的Typora软件打开markdown文件去编辑。</em>
+      <em>Allows you to open markdown file with external Typora.exe, to open varieties of file types with external applications.</em><br/>
+      <em>允许你用外部的Typora软件打开markdown文件去编辑，并且还支持配置不同应用程序去打开其他不同文件类型的文件。</em>
     ]]>
     </description>
 
@@ -16,6 +16,8 @@
         <ul>
             <li>1.0 Open markdown file with external Typora.exe.</li>
             <li>1.1 Add settings panel.</li>
+            <li>1.2 Allow to open varieties of file types with external application.</li>
+            <li>1.3 Add varieties of file types settings panel.</li>
         </ul>
     ]]>
     </change-notes>
