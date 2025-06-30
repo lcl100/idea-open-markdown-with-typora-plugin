@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.lcl100"
-version = "1.1"
+version = "1.2"
 
 repositories {
     mavenCentral()
@@ -25,6 +25,7 @@ tasks {
     withType<JavaCompile> {
         sourceCompatibility = "17"
         targetCompatibility = "17"
+        options.encoding = "utf-8"
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "17"

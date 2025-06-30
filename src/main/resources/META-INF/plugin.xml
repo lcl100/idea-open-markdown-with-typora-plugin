@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>com.lcl100.idea-open-markdown-with-typora-plugin</id>
     <name>Open Markdown with Typora</name>
-    <version>1.1</version>
+    <version>1.2</version>
     <vendor email="lcl2961316542@163.com" url="https://github.com/lcl100/idea-open-markdown-with-typora-plugin">lcl100</vendor>
 
     <description>
@@ -55,6 +55,30 @@
         <action id="OpenMarkdownExternallyAction.Editor"
                 class="com.lcl100.ideaopenmarkdownwithtyporaplugin.OpenMarkdownExternallyAction"
                 text="Open Markdown with Typora" description="Open markdown file with external Typora.exe">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+
+        <!-- 新增通用外部打开动作 -->
+        <action id="OpenWithExternalApp.ProjectView"
+                class="com.lcl100.ideaopenmarkdownwithtyporaplugin.action.OpenWithExternalAppAction"
+                text="Open with External Tool"
+                description="Open file in system default application">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt O"/>
+        </action>
+
+        <action id="OpenWithExternalApp.EditorTab"
+                class="com.lcl100.ideaopenmarkdownwithtyporaplugin.action.OpenWithExternalAppAction"
+                text="Open with External Tool"
+                description="Open file in system default application">
+            <add-to-group group-id="EditorTabPopupMenu" anchor="last"/>
+        </action>
+
+        <action id="OpenWithExternalApp.Editor"
+                class="com.lcl100.ideaopenmarkdownwithtyporaplugin.action.OpenWithExternalAppAction"
+                text="Open with External Tool"
+                description="Open file in system default application">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>

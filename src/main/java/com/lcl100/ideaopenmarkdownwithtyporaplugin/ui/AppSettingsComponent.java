@@ -18,9 +18,10 @@ public class AppSettingsComponent {
     private JPanel mainPanel;
     private JCheckBox useSystemDefaultCheckBox;
     private TextFieldWithBrowseButton customPathField;
+    private JTextField supportedExtensionsField;
 
     public AppSettingsComponent() {
-        // 设置浏览按钮事件
+        // 确保组件不为null
         customPathField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -34,28 +35,48 @@ public class AppSettingsComponent {
             }
         });
 
-
-        useSystemDefaultCheckBox.addActionListener(e -> customPathField.setEnabled(!useSystemDefaultCheckBox.isSelected()));
+        useSystemDefaultCheckBox.addActionListener(e -> {
+            if (customPathField != null) {
+                customPathField.setEnabled(!useSystemDefaultCheckBox.isSelected());
+            }
+        });
     }
 
     public JPanel getPanel() {
         return mainPanel;
     }
 
+    // 添加空值安全保护
     public String getCustomPath() {
-        return customPathField.getText();
+        return (customPathField != null) ? customPathField.getText() : "";
     }
 
     public void setCustomPath(String path) {
-        customPathField.setText(path);
+        if (customPathField != null) {
+            customPathField.setText(path != null ? path : "");
+        }
     }
 
     public boolean useSystemDefault() {
-        return useSystemDefaultCheckBox.isSelected();
+        return (useSystemDefaultCheckBox != null) && useSystemDefaultCheckBox.isSelected();
     }
 
     public void setUseSystemDefault(boolean value) {
-        useSystemDefaultCheckBox.setSelected(value);
-        customPathField.setEnabled(!value);
+        if (useSystemDefaultCheckBox != null) {
+            useSystemDefaultCheckBox.setSelected(value);
+        }
+        if (customPathField != null) {
+            customPathField.setEnabled(!value);
+        }
+    }
+
+    public String getSupportedExtensions() {
+        return (supportedExtensionsField != null) ? supportedExtensionsField.getText() : "";
+    }
+
+    public void setSupportedExtensions(String extensions) {
+        if (supportedExtensionsField != null) {
+            supportedExtensionsField.setText(extensions != null ? extensions : "");
+        }
     }
 }
