@@ -10,6 +10,7 @@ import com.lcl100.ideaopenmarkdownwithtyporaplugin.ui.AppSettingsComponent;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.Map;
 import java.util.Objects;
 
 public class AppSettingsConfigurable implements Configurable {
@@ -30,34 +31,51 @@ public class AppSettingsConfigurable implements Configurable {
 
     @Override
     public boolean isModified() {
-        if (settingsComponent == null) return false;
-
         AppSettingsState settings = AppSettingsState.getInstance();
-        return !settingsComponent.getCustomPath().equals(settings.customAppPath) || settingsComponent.useSystemDefault() != settings.useSystemDefaultForMarkdown || !Objects.equals(settingsComponent.getSupportedExtensions(), settings.supportedExtensions);
+        return !Objects.equals(settingsComponent.getCustomPath(), settings.customAppPath) ||
+                settingsComponent.useSystemDefaultForMarkdown() != settings.useSystemDefaultForMarkdown ||
+                settingsComponent.useSystemDefaultForOthers() != settings.useSystemDefaultForOthers ||
+                !mapsEqual(settingsComponent.getExtensionAppMap(), settings.extensionAppMap);
+    }
+
+    private boolean mapsEqual(Map<String, String> map1, Map<String, String> map2) {
+        if (map1 == null && map2 == null) return true;
+        if (map1 == null || map2 == null) return false;
+        if (map1.size() != map2.size()) return false;
+
+        for (Map.Entry<String, String> entry : map1.entrySet()) {
+            String key = entry.getKey();
+            String value1 = entry.getValue();
+            String value2 = map2.get(key);
+
+            if (!Objects.equals(value1, value2)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public void apply() {
-        if (settingsComponent == null) return;
-
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.customAppPath = settingsComponent.getCustomPath();
-        settings.useSystemDefaultForMarkdown = settingsComponent.useSystemDefault();
-        settings.supportedExtensions = settingsComponent.getSupportedExtensions();
+        settings.useSystemDefaultForMarkdown = settingsComponent.useSystemDefaultForMarkdown();
+        settings.useSystemDefaultForOthers = settingsComponent.useSystemDefaultForOthers();
+        settings.extensionAppMap.clear();
+        settings.extensionAppMap.putAll(settingsComponent.getExtensionAppMap());
     }
 
     @Override
     public void reset() {
-        if (settingsComponent == null) return;
-
         AppSettingsState settings = AppSettingsState.getInstance();
         settingsComponent.setCustomPath(settings.customAppPath);
-        settingsComponent.setUseSystemDefault(settings.useSystemDefaultForMarkdown);
-        settingsComponent.setSupportedExtensions(settings.supportedExtensions);
+        settingsComponent.setUseSystemDefaultForMarkdown(settings.useSystemDefaultForMarkdown);
+        settingsComponent.setUseSystemDefaultForOthers(settings.useSystemDefaultForOthers);
+        settingsComponent.setExtensionAppMap(settings.extensionAppMap);
     }
 
     @Override
     public void disposeUIResources() {
-        settingsComponent = null;
+        // 不需要设置为null
     }
 }

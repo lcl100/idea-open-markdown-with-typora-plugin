@@ -12,19 +12,25 @@ import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @State(
-        name = "md.open.settings.AppSettingsState",
+        name = "OpenMarkdownExternallySettings",
         storages = @Storage("OpenMarkdownExternallySettings.xml")
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
+    // Markdown 特定设置
     public String customAppPath = "";
     public boolean useSystemDefault = true;
-    // Markdown 特定设置（原有设置）
     public boolean useSystemDefaultForMarkdown = true;
 
-    // 通用文件设置（新增）
-    public String supportedExtensions = "txt,log,ini,json,xml,properties,yml,yaml,csv"; // 默认支持的文件扩展名
+    // 文件扩展名关联设置
+    public Map<String, String> extensionAppMap = new LinkedHashMap<>();
+
+    // 默认系统应用设置
+    public boolean useSystemDefaultForOthers = true;
 
     public static AppSettingsState getInstance() {
         return ApplicationManager.getApplication().getService(AppSettingsState.class);
@@ -38,7 +44,10 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     @Override
     public void loadState(@NotNull AppSettingsState state) {
-        this.customAppPath = state.customAppPath;
-        this.useSystemDefault = state.useSystemDefault;
+        this.customAppPath = state.customAppPath != null ? state.customAppPath : "";
+        this.useSystemDefaultForMarkdown = state.useSystemDefaultForMarkdown;
+        this.extensionAppMap = state.extensionAppMap != null ?
+                new LinkedHashMap<>(state.extensionAppMap) : new LinkedHashMap<>();
+        this.useSystemDefaultForOthers = state.useSystemDefaultForOthers;
     }
 }
