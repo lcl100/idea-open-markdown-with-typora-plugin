@@ -5,23 +5,19 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.jetbrains.annotations.NotNull;
+import com.lcl100.ideaopenmarkdownwithtyporaplugin.settings.AppSettingsState;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * @author lcl100
- * @create 2025-06-30 10:51
- */
 public class OpenMarkdownExternallyAction extends AnAction {
 
     @Override
-    public void update(@NotNull AnActionEvent e) {
-        // 仅在选中.md文件时显示菜单项
+    public void update(AnActionEvent e) {
         VirtualFile file = getSelectedFile(e);
-        e.getPresentation().setEnabledAndVisible(file != null && "md".equalsIgnoreCase(file.getExtension()));
+        boolean isMdFile = file != null && "md".equalsIgnoreCase(file.getExtension());
+        e.getPresentation().setEnabledAndVisible(isMdFile);
     }
 
     @Override
@@ -30,7 +26,7 @@ public class OpenMarkdownExternallyAction extends AnAction {
         if (file == null) return;
 
         try {
-            openFileWithExternalApp(new File(file.getPath()));
+            openMarkdownFile(new File(file.getPath()));
         } catch (Exception ex) {
             Messages.showErrorDialog("Error opening file: " + ex.getMessage(), "Open Failed");
         }
@@ -41,17 +37,41 @@ public class OpenMarkdownExternallyAction extends AnAction {
         return (files != null && files.length == 1) ? files[0] : null;
     }
 
-    private void openFileWithExternalApp(File file) throws IOException {
+    private void openMarkdownFile(File file) throws IOException {
+        AppSettingsState settings = AppSettingsState.getInstance();
+
+        if (!settings.useSystemDefault && !settings.customAppPath.isEmpty()) {
+            openWithCustomApp(file, settings.customAppPath);
+        } else {
+            openWithSystemDefault(file);
+        }
+    }
+
+    private void openWithCustomApp(File file, String appPath) throws IOException {
         String os = System.getProperty("os.name").toLowerCase();
 
         if (os.contains("win")) {
-            // Windows: 使用系统关联程序
+            Runtime.getRuntime().exec(new String[]{appPath, file.getAbsolutePath()});
+        } else if (os.contains("mac")) {
+            if (appPath.endsWith(".app")) {
+                Runtime.getRuntime().exec(new String[]{"open", "-a", appPath, file.getAbsolutePath()});
+            } else {
+                Runtime.getRuntime().exec(new String[]{appPath, file.getAbsolutePath()});
+            }
+        } else {
+            // Linux/Unix
+            Runtime.getRuntime().exec(new String[]{appPath, file.getAbsolutePath()});
+        }
+    }
+
+    private void openWithSystemDefault(File file) throws IOException {
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
             Runtime.getRuntime().exec("cmd /c start \"\" \"" + file.getAbsolutePath() + "\"");
         } else if (os.contains("mac")) {
-            // macOS: 使用open命令
             Runtime.getRuntime().exec(new String[]{"open", file.getAbsolutePath()});
         } else {
-            // linux以及其他系统
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(file);
             } else {
