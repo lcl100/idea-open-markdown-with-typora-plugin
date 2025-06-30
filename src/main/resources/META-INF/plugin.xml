@@ -1,0 +1,51 @@
+<idea-plugin>
+    <id>com.lcl100.idea-open-markdown-with-typora-plugin</id>
+    <name>Open Markdown with Typora</name>
+    <version>1.0</version>
+    <vendor email="lcl2961316542@163.com" url="https://github.com/lcl100/idea-open-markdown-with-typora-plugin">lcl100</vendor>
+
+    <description>
+        <![CDATA[
+      <em>Allows you to open markdown file with external Typora.exe.</em><br/>
+      <em>允许你用外部的Typora软件打开markdown文件去编辑。</em>
+    ]]>
+    </description>
+
+    <change-notes>
+        <![CDATA[
+        <ul>
+            <li>1.0 Open markdown file with external Typora.exe.</li>
+        </ul>
+    ]]>
+    </change-notes>
+
+    <idea-version since-build="201.6668.113"/>
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- 注册设置面板 -->
+    </extensions>
+
+    <actions>
+        <!-- 项目视图菜单 -->
+        <action id="OpenMarkdownExternallyAction.ProjectView"
+                class="com.lcl100.ideaopenmarkdownwithtyporaplugin.OpenMarkdownExternallyAction"
+                text="Open Markdown with Typora" description="Open markdown file with external Typora.exe">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </action>
+
+        <!-- 编辑器标签页菜单 -->
+        <action id="OpenMarkdownExternallyAction.EditorTab"
+                class="com.lcl100.ideaopenmarkdownwithtyporaplugin.OpenMarkdownExternallyAction"
+                text="Open Markdown with Typora" description="Open markdown file with external Typora.exe">
+            <add-to-group group-id="EditorTabPopupMenu" anchor="last"/>
+        </action>
+
+        <!-- 编辑器内容菜单 -->
+        <action id="OpenMarkdownExternallyAction.Editor"
+                class="com.lcl100.ideaopenmarkdownwithtyporaplugin.OpenMarkdownExternallyAction"
+                text="Open Markdown with Typora" description="Open markdown file with external Typora.exe">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
